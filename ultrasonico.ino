@@ -8,6 +8,7 @@ int c=0;
 Servo motor;
 long duracion1,distancia1;
 long duracion2,distancia2;
+char fechaini[ ];
 void setup() {
   
   Serial.begin(9600);
@@ -35,52 +36,51 @@ void loop() {
   digitalWrite(pinTrig2,LOW);
   duracion2=pulseIn(pinEcho2,HIGH);
   distancia2=(duracion2/2)/29;
-  
-  if(distancia1>=500 || distancia1<=0){
-   // Serial.println("---Nada Todavia---");
-  }
-  else {
-    if(distancia1<=15){
-      motor.write(180);
-      delay(2000);
-      motor.write(85);
-      delay(2000);
-      motor.write(0);
-      delay(2000);
-      c+=1;
+  //if(!esllena(distancia2)){
+    if(distancia1>=500 || distancia1<=0){
+     // Serial.println("---Nada Todavia---");
+    }
+    else {
+      if(distancia1<=15){
+        motor.write(180);
+        delay(2000);
+        motor.write(85);
+        delay(2000);
+        motor.write(0);
+        delay(2000);
+        c+=1;
+      }
+      else{
+        motor.write(85);
+      }
+    }
+    if(esllena(distancia2)){
+      Serial.print("1");
+      Serial.print(",");
+      Serial.print(c);
+      Serial.print(",v,");
+      imprime(fechaini);
+      Serial.print(",");
+      Serial.print(day(t));
+      Serial.print(+ "/") ;  
+      Serial.print(month(t));
+      Serial.print(+ "/") ;
+      Serial.println(year(t));
     }
     else{
-      motor.write(85);
+      fechaini=(day(t),',',month(t),',',year(t))
     }
-   // Serial.print(distancia1);
-    //Serial.println("cms");
+    delay(100);
+  //}
+}
+boolean esllena(long d){
+  if(d<=10){
+    return true;
   }
-  if(distancia2<=10){
-    Serial.print("Basurero Lleno,");
-    Serial.print(c);
-    Serial.print(",");
-    Serial.print(day(t));
-    Serial.print(+ "/") ;  
-    Serial.print(month(t));
-    Serial.print(+ "/") ;
-    Serial.print(year(t));
-  }
-  delay(100);
+  return false;
 }
 /*
-void esllena(int d){
-  if(distancia2<=10){
-    Serial.print("Basurero Lleno,");
-    Serial.print(c);
-    Serial.print(",");
-    Serial.print(day(t));
-    Serial.print(+ "/") ;  
-    Serial.print(month(t));
-    Serial.print(+ "/") ;
-    Serial.print(year(t));
-  }
-}
-void fecha(t){
+void imprime(t){
   char f[ ]=(day(t),'',month(t),year(t))
   return f
 } */
