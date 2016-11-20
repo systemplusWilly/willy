@@ -10,9 +10,11 @@ int sw2=1;
 int d=0;
 int m=0;
 int a=0;
+int val =0;
 Servo motor;
 long duracion1,distancia1;
 long duracion2,distancia2;
+int sensorPin=11;
 void setup() {
   
   Serial.begin(9600);
@@ -21,6 +23,9 @@ void setup() {
   pinMode (pinEcho2,INPUT);
   pinMode (pinTrig2,OUTPUT);
   motor.attach(9);
+  for(int i=0;i<30;i++){
+    delay(1000);
+  }
   setTime(12,53,00,20,11,2016);
 }
 
@@ -40,7 +45,8 @@ void loop() {
   digitalWrite(pinTrig2,LOW);
   duracion2=pulseIn(pinEcho2,HIGH);
   distancia2=(duracion2/2)/29;
-  //while(sw=1){
+  val=digitalRead(sensorPin);
+  if(val==HIGH){
     if(distancia1>=500 || distancia1<=0){
      // Serial.println("---Nada Todavia---");
     }
@@ -76,14 +82,31 @@ void loop() {
       Serial.print(year(t));
       Serial.println(",1");
       sw2=1;
+      sw=1;
     }
-  //}
+  }
   if(!esllena(distancia2)){
     if(sw2==1){
       sw2=0;
       d=day(t);
       m=month(t);
       a=year(t);
+      Serial.print("1");
+      Serial.print(",");
+      Serial.print(c);
+      Serial.print(",F,");
+      Serial.print(d);
+      Serial.print(+ "/") ;  
+      Serial.print(m);
+      Serial.print(+ "/") ;
+      Serial.print(a);
+      Serial.print(",");
+      Serial.print(day(t));
+      Serial.print(+ "/") ;  
+      Serial.print(month(t));
+      Serial.print(+ "/") ;
+      Serial.print(year(t));
+      Serial.println(",1");
     }
   }
   delay(100);
