@@ -5,10 +5,14 @@
 #include<Servo.h>
 #include "Time.h"
 int c=0;
+int sw=1;
+int sw2=1;
+int d=0;
+int m=0;
+int a=0;
 Servo motor;
 long duracion1,distancia1;
 long duracion2,distancia2;
-char fechaini[ ];
 void setup() {
   
   Serial.begin(9600);
@@ -17,7 +21,7 @@ void setup() {
   pinMode (pinEcho2,INPUT);
   pinMode (pinTrig2,OUTPUT);
   motor.attach(9);
-  setTime(12,53,00,19,11,2016);
+  setTime(12,53,00,20,11,2016);
 }
 
 void loop() {
@@ -36,7 +40,7 @@ void loop() {
   digitalWrite(pinTrig2,LOW);
   duracion2=pulseIn(pinEcho2,HIGH);
   distancia2=(duracion2/2)/29;
-  //if(!esllena(distancia2)){
+  //while(sw=1){
     if(distancia1>=500 || distancia1<=0){
      // Serial.println("---Nada Todavia---");
     }
@@ -51,27 +55,38 @@ void loop() {
         c+=1;
       }
       else{
-        motor.write(85);
+        motor.write(0);
       }
     }
     if(esllena(distancia2)){
       Serial.print("1");
       Serial.print(",");
       Serial.print(c);
-      Serial.print(",v,");
-      imprime(fechaini);
+      Serial.print(",F,");
+      Serial.print(d);
+      Serial.print(+ "/") ;  
+      Serial.print(m);
+      Serial.print(+ "/") ;
+      Serial.print(a);
       Serial.print(",");
       Serial.print(day(t));
       Serial.print(+ "/") ;  
       Serial.print(month(t));
       Serial.print(+ "/") ;
-      Serial.println(year(t));
+      Serial.print(year(t));
+      Serial.println(",1");
+      sw2=1;
     }
-    else{
-      fechaini=(day(t),',',month(t),',',year(t))
-    }
-    delay(100);
   //}
+  if(!esllena(distancia2)){
+    if(sw2==1){
+      sw2=0;
+      d=day(t);
+      m=month(t);
+      a=year(t);
+    }
+  }
+  delay(100);
 }
 boolean esllena(long d){
   if(d<=10){
@@ -79,8 +94,4 @@ boolean esllena(long d){
   }
   return false;
 }
-/*
-void imprime(t){
-  char f[ ]=(day(t),'',month(t),year(t))
-  return f
-} */
+
